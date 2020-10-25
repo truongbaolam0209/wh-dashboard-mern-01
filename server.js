@@ -1,11 +1,14 @@
 const express = require('express');
-// const connectDB = require('./config/db');
-
+const connectDB = require('./config/db');
 
 const app = express();
 
 
-app.get('/', (req, res) => { res.send('API running ...') });
+connectDB();
+app.use(express.json({ extended: false }));
+
+
+app.use('/api/records', require('./routes/api/records'));
 
 
 
