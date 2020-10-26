@@ -1,6 +1,5 @@
 import { Col, Divider, Modal, Row, Skeleton } from 'antd';
 import Axios from 'axios';
-import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { colorType } from '../assets/constant';
 import ChartBarDrawing from '../components/ChartBarDrawing';
@@ -13,14 +12,14 @@ import NavBar from '../components/NavBar';
 import TableDrawingList from '../components/TableDrawingList';
 import CardPanel from '../components/ui/CardPanel';
 import CardPanelProject from '../components/ui/CardPanelProject';
-import { api, convertDataToStackedChart, getAllDrawingSameValueInOneColumn, getDataConverted, mergeUndefined } from '../utils/function';
+import { api, getDataConverted } from '../utils/function';
 
 
 
 
-const randomInteger = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+// const randomInteger = (min, max) => {
+//     return Math.floor(Math.random() * (max - min + 1)) + min;
+// };
 
 
 const PageDashboard = () => {
@@ -70,130 +69,128 @@ const PageDashboard = () => {
 
 
 
+    // const convertDataToSaveRecord = (data) => {
+    //     const allProjectsDwgStatus = convertDataToStackedChart(data).dataChart;
+
+    //     const filterDwgStatus = (projectName, data) => {
+    //         const dwgStatus = data.filter(project => project.name === projectName)[0];
+    //         delete dwgStatus.name;
+    //         let dwgStatusConverted = [];
+    //         for (const key in dwgStatus) {
+    //             dwgStatusConverted.push({
+    //                 status: key,
+    //                 count: dwgStatus[key]
+    //             });
+    //         };
+    //         return dwgStatusConverted;
+    //     };
 
 
-    const convertDataToSaveRecord = (data) => {
-        const allProjectsDwgStatus = convertDataToStackedChart(data).dataChart;
-
-        const filterDwgStatus = (projectName, data) => {
-            const dwgStatus = data.filter(project => project.name === projectName)[0];
-            delete dwgStatus.name;
-            let dwgStatusConverted = [];
-            for (const key in dwgStatus) {
-                dwgStatusConverted.push({
-                    status: key,
-                    count: dwgStatus[key]
-                });
-            };
-            return dwgStatusConverted;
-        };
+    //     const filterDwgRevision = (data) => {
+    //         const { drawingCount } = mergeUndefined(getAllDrawingSameValueInOneColumn(data, 'Rev'), '0');
+    //         let dwgRevisionConverted = [];
+    //         for (const key in drawingCount) {
+    //             dwgRevisionConverted.push({
+    //                 revision: key,
+    //                 count: drawingCount[key]
+    //             });
+    //         };
+    //         return dwgRevisionConverted;
+    //     };
 
 
-        const filterDwgRevision = (data) => {
-            const { drawingCount } = mergeUndefined(getAllDrawingSameValueInOneColumn(data, 'Rev'), '0');
-            let dwgRevisionConverted = [];
-            for (const key in drawingCount) {
-                dwgRevisionConverted.push({
-                    revision: key,
-                    count: drawingCount[key]
-                });
-            };
-            return dwgRevisionConverted;
-        };
+    //     let arr = [];
+    //     for (const projectName in data) {
+    //         arr = [...arr, {
+    //             projectName,
+    //             drawingLateConstruction: randomInteger(9, 30),
+    //             drawingLateApproval: randomInteger(15, 30),
+    //             drawingLateSubmission: randomInteger(9, 25),
+    //             drawingStatus: [
+    //                 {
+    //                     status: 'Approved with comments, to Resubmit',
+    //                     count: randomInteger(35, 60)
+    //                 },
+    //                 {
+    //                     status: 'Approved with Comment, no submission Required',
+    //                     count: randomInteger(35, 60)
+    //                 },
+    //                 {
+    //                     status: 'Approved for Construction',
+    //                     count: randomInteger(35, 60)
+    //                 },
+    //                 {
+    //                     status: 'Consultant reviewing',
+    //                     count: randomInteger(35, 60)
+    //                 },
+    //                 {
+    //                     status: 'Not Started',
+    //                     count: randomInteger(55, 90)
+    //                 },
+    //                 {
+    //                     status: 'Revise In-Progress',
+    //                     count: randomInteger(35, 60)
+    //                 },
+    //                 {
+    //                     status: '1st cut of drawing in-progress',
+    //                     count: randomInteger(35, 60)
+    //                 },
+    //             ],
+    //             drawingByRevision: [
+    //                 {
+    //                     revision: '0',
+    //                     count: randomInteger(65, 100)
+    //                 },
+    //                 {
+    //                     revision: 'A',
+    //                     count: randomInteger(55, 75)
+    //                 },
+    //                 {
+    //                     revision: 'B',
+    //                     count: randomInteger(30, 45)
+    //                 },
+    //                 {
+    //                     revision: 'C',
+    //                     count: randomInteger(20, 40)
+    //                 },
+    //                 {
+    //                     revision: 'D',
+    //                     count: randomInteger(10, 30)
+    //                 },
+    //             ],
+    //             // drawingLateApproval: getDrawingLateNow(data[projectName], 'getApproval').length,
+    //             // drawingLateSubmission: getDrawingLateNow(data[projectName], 'drgToConsultant').length,
+    //             // drawingStatus: filterDwgStatus(projectName, allProjectsDwgStatus),
+    //             // drawingByRevision: filterDwgRevision(data[projectName])
+    //         }];
+    //     };
+    //     console.log(arr);
+    //     return arr;
+    // };
 
+    // const saveRecords = async () => {
+    //     try {
+    //         const res = await api.post('/records', {
+    //             date: new Date(),
+    //             projects: convertDataToSaveRecord(data)
+    //         });
+    //     } catch (err) {
+    //         console.log(err);
+    //     };
+    // };
 
-        let arr = [];
-        for (const projectName in data) {
-            arr = [...arr, {
-                projectName,
-                drawingLateConstruction: randomInteger(9, 30),
-                drawingLateApproval: randomInteger(15, 30),
-                drawingLateSubmission: randomInteger(9, 25),
-                drawingStatus: [
-                    {
-                        status: 'Approved with comments, to Resubmit',
-                        count: randomInteger(35, 60)
-                    },
-                    {
-                        status: 'Approved with Comment, no submission Required',
-                        count: randomInteger(35, 60)
-                    },
-                    {
-                        status: 'Approved for Construction',
-                        count: randomInteger(35, 60)
-                    },
-                    {
-                        status: 'Consultant reviewing',
-                        count: randomInteger(35, 60)
-                    },
-                    {
-                        status: 'Not Started',
-                        count: randomInteger(55, 90)
-                    },
-                    {
-                        status: 'Revise In-Progress',
-                        count: randomInteger(35, 60)
-                    },
-                    {
-                        status: '1st cut of drawing in-progress',
-                        count: randomInteger(35, 60)
-                    },
-                ],
-                drawingByRevision: [
-                    {
-                        revision: '0',
-                        count: randomInteger(65, 100)
-                    },
-                    {
-                        revision: 'A',
-                        count: randomInteger(55, 75)
-                    },
-                    {
-                        revision: 'B',
-                        count: randomInteger(30, 45)
-                    },
-                    {
-                        revision: 'C',
-                        count: randomInteger(20, 40)
-                    },
-                    {
-                        revision: 'D',
-                        count: randomInteger(10, 30)
-                    },
-                ],
-                // drawingLateApproval: getDrawingLateNow(data[projectName], 'getApproval').length,
-                // drawingLateSubmission: getDrawingLateNow(data[projectName], 'drgToConsultant').length,
-                // drawingStatus: filterDwgStatus(projectName, allProjectsDwgStatus),
-                // drawingByRevision: filterDwgRevision(data[projectName])
-            }];
-        };
-        console.log(arr);
-        return arr;
-    };
-
-    const saveRecords = async () => {
-        try {
-            const res = await api.post('/records', {
-                date: new Date(),
-                projects: convertDataToSaveRecord(data)
-            });
-        } catch (err) {
-            console.log(err);
-        };
-    };
-
-    const createDummyRecord = async () => {
-        try {
-            for (let i = 0; i < 100; i++) {
-                const res = await api.post('/records', {
-                    date: moment(new Date(2020, 6, 21)).add(i, 'day')._d,
-                    projects: convertDataToSaveRecord(data)
-                });
-            };
-        } catch (err) {
-            console.log(err);
-        };
-    };
+    // const createDummyRecord = async () => {
+    //     try {
+    //         for (let i = 0; i < 100; i++) {
+    //             const res = await api.post('/records', {
+    //                 date: moment(new Date(2020, 6, 21)).add(i, 'day')._d,
+    //                 projects: convertDataToSaveRecord(data)
+    //             });
+    //         };
+    //     } catch (err) {
+    //         console.log(err);
+    //     };
+    // };
 
     const loadRecords = async () => {
         try {
