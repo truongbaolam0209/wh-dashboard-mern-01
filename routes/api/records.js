@@ -10,7 +10,6 @@ router.get(
     async (req, res) => {
         try {
             const records = await Record.find().sort({ date: -1 });
-            console.log(records);
             res.json(records);
             
         } catch (err) {

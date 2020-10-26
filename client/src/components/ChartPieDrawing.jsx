@@ -1,12 +1,26 @@
 import { Badge } from 'antd';
 import _ from 'lodash';
 import React from 'react';
-import { Cell, Pie, PieChart } from 'recharts';
+import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 import styled from 'styled-components';
 import { pieChartColors2 } from '../assets/constant';
 import { getAllDrawingSameValueInOneColumn, mergeUndefined } from '../utils/function';
 
 
+
+const LabelCustom = (props) => {
+    const { x, y, value } = props;
+    return (
+        <text
+            x={x - 3} y={y - 3}
+            fill='black'
+            fontSize={15}
+            textAnchor='end'
+        >
+            {value}
+        </text>
+    );
+};
 
 
 const ChartPieDrawing = ({ data, openDrawingTable, projectName }) => {
@@ -22,14 +36,6 @@ const ChartPieDrawing = ({ data, openDrawingTable, projectName }) => {
         );
     };
 
-    // const [activeIndex, setActiveIndex] = useState(null);
-    // const onMouseEnter = (data, index) => {
-    //     setActiveIndex(index);
-    // };
-    // const onMouseLeave = (data, index) => {
-    //     setActiveIndex(null);
-    // };
-
 
     return (
         <>
@@ -38,22 +44,22 @@ const ChartPieDrawing = ({ data, openDrawingTable, projectName }) => {
                     data={dataChart}
                     cx={150}
                     cy={150}
-                    labelLine={false}
                     label={renderCustomizedLabel}
                     dataKey='value'
                     outerRadius={100}
                     onClick={onClick}
-                // onMouseEnter={onMouseEnter}
-                // onMouseLeave={onMouseLeave}
+                    labelLine
+                    label={<LabelCustom />}
                 >
                     {Object.keys(drawingCount).map(item => (
                         <Cell
-                            cursor='pointer'
                             key={`cell-${item}`}
+                            cursor='pointer'
                             fill={pieChartColors2[item]}
                         />
                     ))}
                 </Pie>
+                <Tooltip />
             </PieChart>
 
             <div style={{ margin: '0 auto', display: 'table' }}>

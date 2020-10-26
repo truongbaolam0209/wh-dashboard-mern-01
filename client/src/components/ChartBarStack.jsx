@@ -1,7 +1,7 @@
 
-import { Badge, Tooltip } from 'antd';
+import { Badge } from 'antd';
 import React from 'react';
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, LabelList, Tooltip, XAxis, YAxis } from 'recharts';
 import styled from 'styled-components';
 import { chartWidth, colorType, pieChartColors2 } from '../assets/constant';
 import { convertDataToStackedChart } from '../utils/function';
@@ -9,7 +9,6 @@ import CardPanel from './ui/CardPanel';
 
 
 const ChartBarStack = ({ data, title }) => {
-
 
 
     const inputData = title === 'Drawing Status' ? convertDataToStackedChart(data).dataChart

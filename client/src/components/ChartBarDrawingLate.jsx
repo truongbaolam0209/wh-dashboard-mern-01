@@ -1,12 +1,22 @@
 
-import { Badge, Tooltip } from 'antd';
+import { Badge } from 'antd';
 import React from 'react';
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, LabelList, Tooltip, XAxis, YAxis } from 'recharts';
 import styled from 'styled-components';
 import { chartWidth, colorType, sizeType } from '../assets/constant';
 import { getDrawingLateNow } from '../utils/function';
 import CardPanel from './ui/CardPanel';
 
+
+
+const LabelPieChart = (props) => {
+
+    console.log(props);
+
+    return (
+        <div></div>
+    );
+};
 
 
 const ChartBarDrawingLate = ({ data, title }) => {
@@ -43,11 +53,12 @@ const ChartBarDrawingLate = ({ data, title }) => {
                 margin={{ top: 35, right: 20, left: 15, bottom: 30 }}
                 padding={{ top: 10 }}
                 barSize={30}
+                label={<LabelPieChart />}
             >
-                <CartesianGrid strokeDasharray='3 3' />
                 <XAxis dataKey='name' textAnchor='end' angle={-20} interval={0} scale='point' padding={{ left: 50, right: 50 }} />
                 <YAxis />
                 <Tooltip />
+                <CartesianGrid strokeDasharray='3 3' />
                 <Bar
                     dataKey='value'
                     fill={colorType.red}

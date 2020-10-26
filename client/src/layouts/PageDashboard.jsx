@@ -1,9 +1,9 @@
-import { Col, Divider, Icon, Modal, Row, Skeleton } from 'antd';
+import { Col, Divider, Modal, Row, Skeleton } from 'antd';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { colorType } from '../assets/constant';
 import ChartBarDrawing from '../components/ChartBarDrawing';
 import ChartBarDrawingLate from '../components/ChartBarDrawingLate';
-import ChartBarRecord from '../components/ChartBarRecord';
 import ChartBarStack from '../components/ChartBarStack';
 import ChartPieDrawing from '../components/ChartPieDrawing';
 import ChartProgress from '../components/ChartProgress';
@@ -13,6 +13,8 @@ import TableDrawingList from '../components/TableDrawingList';
 import CardPanel from '../components/ui/CardPanel';
 import CardPanelProject from '../components/ui/CardPanelProject';
 import { api, convertDataToStackedChart, getAllDrawingSameValueInOneColumn, getDataConverted, mergeUndefined } from '../utils/function';
+
+
 
 
 const randomInteger = (min, max) => {
@@ -53,7 +55,8 @@ const PageDashboard = () => {
             };
         };
         loadData();
-        loadRecords();
+        // loadRecords();
+
     }, []);
 
 
@@ -167,26 +170,35 @@ const PageDashboard = () => {
         return arr;
     };
 
-
-
     const saveRecords = async () => {
         try {
             const res = await api.post('/records', {
                 date: new Date(),
                 projects: convertDataToSaveRecord(data)
             });
-            console.log(res);
         } catch (err) {
             console.log(err);
         };
     };
 
+    const createDummyRecord = async () => {
+        try {
+            for (let i = 0; i < 100; i++) {
+                const res = await api.post('/records', {
+                    date: moment(new Date(2020, 6, 21)).add(i, 'day')._d,
+                    projects: convertDataToSaveRecord(data)
+                });
+            };
+        } catch (err) {
+            console.log(err);
+        };
+    };
 
     const loadRecords = async () => {
         try {
             const res = await api.get('/records');
-            console.log(res.data);
             setDataRecord(res.data);
+            localStorage.setItem('wh-r', JSON.stringify(res.data));
         } catch (err) {
             console.log(err);
         };
@@ -196,14 +208,8 @@ const PageDashboard = () => {
 
     return (
         <NavBar>
-            <Icon
-                type='pie-chart'
-                style={{ marginTop: 100, fontSize: 50 }}
-                onClick={saveRecords}
-            />
 
-
-            <div style={{ marginTop: '60px' }}>
+            <div style={{ marginTop: 60, marginBottom: 60 }}>
                 <Row justify='space-around' style={{ margin: '25px 0 5px 0' }}>
                     <ChartBarDrawingLate title='No Of Drawing Late Construction' />
                     <ChartBarDrawingLate data={data} title='No Of Drawing Late Approval' />
@@ -292,9 +298,8 @@ const PageDashboard = () => {
                 )}
 
 
-                {dataRecord && (
-                    <ChartBarRecord data={dataRecord} />
-                )}
+                {/* <ChartBarRecord data={JSON.parse(localStorage.getItem('wh-r'))} /> */}
+
 
 
 

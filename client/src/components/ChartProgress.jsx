@@ -1,4 +1,4 @@
-import { Modal, Progress } from 'antd';
+import { Modal, Progress, Tooltip } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { colorType } from '../assets/constant';
@@ -64,15 +64,17 @@ const ChartProgress = ({ data, projectName, openDrawingTable }) => {
             <div style={{ width: '80%', margin: '25px auto' }}>
 
                 {dataInput.map(item => (
-                    <Container key={item.name} onClick={() => progressBarClick(item.name)}>
-                        <span>{item.name}</span>
-                        <Progress
-                            trailColor='#eee'
-                            strokeColor={colorType.grey2}
-                            percent={Math.round(item.value / allDrawingsLatestRevision.length * 100)}
-                            style={{ paddingBottom: 29 }}
-                        />
-                    </Container>
+                    <Tooltip title={item.name} key={item.name}>
+                        <Container onClick={() => progressBarClick(item.name)}>
+                            <span>{item.name}</span>
+                            <Progress
+                                trailColor='#eee'
+                                strokeColor={colorType.grey2}
+                                percent={Math.round(item.value / allDrawingsLatestRevision.length * 100)}
+                                style={{ paddingBottom: 29 }}
+                            />
+                        </Container>
+                    </Tooltip>
                 ))}
             </div>
 
@@ -95,7 +97,7 @@ const ChartProgress = ({ data, projectName, openDrawingTable }) => {
 export default ChartProgress;
 
 const Container = styled.div`
-    &:hover {
+    :hover {
         cursor: pointer,
     }
 `;
