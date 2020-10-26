@@ -7,7 +7,7 @@ import ButtonCapsule from './ui/ButtonCapsule';
 
 
 
-const FormPivot = ({ projectName, data, openDrawingTable }) => {
+const FormPivot = ({ projectName, data, dataRecord }) => {
 
     const { columnsIndexArray } = data;
 
@@ -113,7 +113,8 @@ const FormPivot = ({ projectName, data, openDrawingTable }) => {
                 footer={null}
             >
                 <ChartBarRecord
-                    data={JSON.parse(localStorage.getItem('wh-r'))}
+                    // data={JSON.parse(localStorage.getItem('wh-r'))}
+                    data={dataRecord}
                     projectName={projectName}
                 />
             </Modal>

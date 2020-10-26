@@ -1,4 +1,5 @@
 import { Col, Divider, Modal, Row, Skeleton } from 'antd';
+import Axios from 'axios';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { colorType } from '../assets/constant';
@@ -35,19 +36,19 @@ const PageDashboard = () => {
         const loadData = async () => {
             setLoading(true);
             try {
-                // const result = await Axios.post(
-                //     'https://bim.wohhup.com/api/smartsheet/get-sheets-dashboard',
-                //     { listSheetId: [8919906142971780, 4758181617395588] }
-                // );
-                // setData(getDataConverted(result.data));
-                // setLoading(false);
+                const result = await Axios.post(
+                    'https://bim.wohhup.com/api/smartsheet/get-sheets-dashboard',
+                    { listSheetId: [8919906142971780, 4758181617395588] }
+                );
+                setData(getDataConverted(result.data));
+                setLoading(false);
 
-                setTimeout(() => {
-                    const result = JSON.parse(localStorage.getItem('wh'));
-                    console.log('-----------------------------------------', 'DATA FETCHED');
-                    setData(getDataConverted(result));
-                    setLoading(false);
-                }, 100);
+                // setTimeout(() => {
+                //     const result = JSON.parse(localStorage.getItem('wh'));
+                //     console.log('-----------------------------------------', 'DATA FETCHED');
+                //     setData(getDataConverted(result));
+                //     setLoading(false);
+                // }, 100);
                 // localStorage.setItem('wh', JSON.stringify(result.data));
             } catch (err) {
                 console.log(err);
@@ -55,7 +56,7 @@ const PageDashboard = () => {
             };
         };
         loadData();
-        // loadRecords();
+        loadRecords();
 
     }, []);
 
@@ -198,7 +199,7 @@ const PageDashboard = () => {
         try {
             const res = await api.get('/records');
             setDataRecord(res.data);
-            localStorage.setItem('wh-r', JSON.stringify(res.data));
+            // localStorage.setItem('wh-r', JSON.stringify(res.data));
         } catch (err) {
             console.log(err);
         };
@@ -260,6 +261,7 @@ const PageDashboard = () => {
                                             data={data[projectName]}
                                             openDrawingTable={openDrawingTable}
                                             projectName={projectName}
+                                            dataRecord={dataRecord}
                                         />
                                     </ChartPanel>
 
