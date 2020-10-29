@@ -1,5 +1,4 @@
 import { Col, Divider, Modal, Row, Skeleton } from 'antd';
-import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { colorType } from '../assets/constant';
 import ChartBarDrawing from '../components/ChartBarDrawing';
@@ -12,7 +11,7 @@ import NavBar from '../components/NavBar';
 import TableDrawingList from '../components/TableDrawingList';
 import CardPanel from '../components/ui/CardPanel';
 import CardPanelProject from '../components/ui/CardPanelProject';
-import { api, getDataConverted } from '../utils/function';
+import { getDataConverted } from '../utils/function';
 
 
 
@@ -35,19 +34,19 @@ const PageDashboard = () => {
         const loadData = async () => {
             setLoading(true);
             try {
-                const result = await Axios.post(
-                    'https://bim.wohhup.com/api/smartsheet/get-sheets-dashboard',
-                    { listSheetId: [8919906142971780, 4758181617395588] }
-                );
-                setData(getDataConverted(result.data));
-                setLoading(false);
+                // const result = await Axios.post(
+                //     'https://bim.wohhup.com/api/smartsheet/get-sheets-dashboard',
+                //     { listSheetId: [8919906142971780, 4758181617395588] }
+                // );
+                // setData(getDataConverted(result.data));
+                // setLoading(false);
 
-                // setTimeout(() => {
-                //     const result = JSON.parse(localStorage.getItem('wh'));
-                //     console.log('-----------------------------------------', 'DATA FETCHED');
-                //     setData(getDataConverted(result));
-                //     setLoading(false);
-                // }, 100);
+                setTimeout(() => {
+                    const result = JSON.parse(localStorage.getItem('wh'));
+                    console.log('-----------------------------------------', 'DATA FETCHED');
+                    setData(getDataConverted(result));
+                    setLoading(false);
+                }, 100);
                 // localStorage.setItem('wh', JSON.stringify(result.data));
             } catch (err) {
                 console.log(err);
@@ -55,7 +54,7 @@ const PageDashboard = () => {
             };
         };
         loadData();
-        loadRecords();
+        // loadRecords();
 
     }, []);
 
@@ -194,9 +193,10 @@ const PageDashboard = () => {
 
     const loadRecords = async () => {
         try {
-            const res = await api.get('/records');
-            setDataRecord(res.data);
+            // const res = await api.get('/records');
+            // setDataRecord(res.data);
             // localStorage.setItem('wh-r', JSON.stringify(res.data));
+            // setDataRecord(localStorage.setItem('wh-r', JSON.stringify(res.data)));
         } catch (err) {
             console.log(err);
         };
@@ -212,7 +212,7 @@ const PageDashboard = () => {
                     <ChartBarDrawingLate title='No Of Drawing Late Construction' />
                     <ChartBarDrawingLate data={data} title='No Of Drawing Late Approval' />
                     <ChartBarStack data={data} title='Drawing Status' />
-                    <ChartBarStack title='Productivity - (days per drawing)' />
+                    <ChartBarStack data={productivityData} title='Productivity - (days per drawing)' />
                 </Row>
 
                 {!loading && data ? (
@@ -342,6 +342,30 @@ const SkeletonCard = () => {
             </CardPanel>
         </div>
     );
+};
+
+
+
+const productivityData = {
+    inputData: [
+        {
+            'Modelling': 3,
+            'Shopdrawing': 5,
+            'Submit To Consultant': 2,
+            'Consultant Reply': 5,
+            'Get Approval': 4,
+            'name': 'Sumang'
+        },
+        {
+            'Modelling': 4,
+            'Shopdrawing': 6,
+            'Submit To Consultant': 3,
+            'Consultant Reply': 4,
+            'Get Approval': 2,
+            'name': 'Handy'
+        }
+    ],
+    inputStack: ['Modelling', 'Shopdrawing', 'Submit To Consultant', 'Consultant Reply', 'Get Approval']
 };
 
 

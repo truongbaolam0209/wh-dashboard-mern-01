@@ -53,7 +53,6 @@ const ChartBarDrawingLate = ({ data, title }) => {
                 margin={{ top: 35, right: 20, left: 15, bottom: 30 }}
                 padding={{ top: 10 }}
                 barSize={30}
-                label={<LabelPieChart />}
             >
                 <XAxis dataKey='name' textAnchor='end' angle={-20} interval={0} scale='point' padding={{ left: 50, right: 50 }} />
                 <YAxis />
