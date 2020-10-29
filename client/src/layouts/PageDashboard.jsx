@@ -54,15 +54,15 @@ const PageDashboard = () => {
             };
         };
         loadData();
-        // loadRecords();
+        loadRecords();
 
     }, []);
 
 
     const [drawingTableVisible, setDrawingTableVisible] = useState(false);
     const [drawingTableData, setDrawingTableData] = useState(null);
-    const openDrawingTable = (projectName, title, drawings, columnsIndexArray) => {
-        setDrawingTableData({ projectName, title, drawings, columnsIndexArray });
+    const openDrawingTable = (projectName, title, drawings, columnsIndexArray, columnsHeader) => {
+        setDrawingTableData({ projectName, title, drawings, columnsIndexArray, columnsHeader });
         setDrawingTableVisible(true);
     };
 
@@ -196,7 +196,9 @@ const PageDashboard = () => {
             // const res = await api.get('/records');
             // setDataRecord(res.data);
             // localStorage.setItem('wh-r', JSON.stringify(res.data));
-            // setDataRecord(localStorage.setItem('wh-r', JSON.stringify(res.data)));
+            
+            setDataRecord(JSON.parse(localStorage.getItem('wh-r')));
+            
         } catch (err) {
             console.log(err);
         };
@@ -243,7 +245,7 @@ const PageDashboard = () => {
 
                                     {/* {deviceWidth && deviceWidth >= sizeType.xl && <Divider type='horizontal' style={{ padding: '3px 0' }} />} */}
 
-                                    <ChartPanel title='Drawing counts by revision'>
+                                    <ChartPanel title='Nos of drawing per revision'>
                                         <ChartBarDrawing
                                             data={data[projectName]}
                                             openDrawingTable={openDrawingTable}

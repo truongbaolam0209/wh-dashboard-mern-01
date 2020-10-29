@@ -1,35 +1,12 @@
 
 import { Badge } from 'antd';
-import React from 'react';
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts';
+import React, { useState } from 'react';
+import { Bar, BarChart, CartesianGrid, LabelList, Tooltip, XAxis, YAxis } from 'recharts';
 import styled from 'styled-components';
 import { chartWidth, colorType, pieChartColors2 } from '../assets/constant';
 import { convertDataToStackedChart } from '../utils/function';
 import CardPanel from './ui/CardPanel';
 
-
-
-
-// const LabelCustomStacked = (props) => {
-//     console.log(props);
-//     const {x, y, value} = props;
-    // const { cx, cy, midAngle, innerRadius, outerRadius, value } = props;
-    // const RADIAN = Math.PI / 180;
-    // const radius = 28 + innerRadius + (outerRadius - innerRadius);
-    // const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    // const y = cy + radius * Math.sin(-midAngle * RADIAN);
-    // return (
-    //     <text
-    //         x={x}
-    //         y={y}
-    //         fill='black'
-            // textAnchor={x > cx ? 'start' : 'end'}
-//             dominantBaseline='central'
-//         >
-//             {value}
-//         </text>
-//     );
-// };
 
 
 
@@ -43,16 +20,71 @@ const ChartBarStack = ({ data, title }) => {
         : title === 'Productivity - (days per drawing)' ? data.inputStack : null;
 
 
-    console.log(inputData, inputStack);
+    const LabelCustomStacked = (props) => {
+        const { x, y, value, height } = props;
+        return (
+            <>
+                <div className='line'></div>
+                <text
+                    style={{ fontSize: 13 }}
+                    x={x + 32}
+                    y={y + height / 2}
+                    fill='#2c3e50'
+                    dominantBaseline='central'
+
+                >
+                    {value === 0 ? null : value}
+                </text>
+            </>
+        );
+    };
+
+    const LabelCustomStackedTotal = (props) => {
+        const { x, y, value, topBar } = props;
+        return (
+            <>
+                <text
+                    style={{ fontSize: 17, fontWeight: 'bold' }}
+                    x={x}
+                    y={y - 10}
+                    fill='black'
+                    dominantBaseline='central'
+
+                >
+                    {topBar ? value : null}
+                </text>
+            </>
+        );
+    };
 
 
-    // const xxx = (e) => {
-    //     console.log(e);
-    // };
+    const [tooltip, setTooltip] = useState(false);
+
+    const TooltipCustom = (props) => {
+        const { active, payload } = props;
+
+        if (!active || !tooltip) return null;
+        for (const bar of payload)
+            if (bar.dataKey === tooltip) {
+                return (
+                    <div style={{
+                        background: 'white', 
+                        border: '1px solid grey',
+                        padding: '10px',
+                        maxWidth: '180px'
+
+                    }}>
+                        {bar.name}<br />({bar.value})
+                    </div>
+                );
+            };
+        return null;
+    };
+
+
 
 
     return (
-
         <CardPanel
             title={title}
             headColor={colorType.orange}
@@ -70,27 +102,26 @@ const ChartBarStack = ({ data, title }) => {
                         <CartesianGrid strokeDasharray='3 3' />
                         <XAxis tickSize={3} dataKey='name' textAnchor='end' angle={-20} interval={0} scale='point' padding={{ left: 50, right: 50 }} />
                         <YAxis />
-                        {/* <Tooltip /> */}
-                        {inputStack.map((item, i) => {
-                            // console.log(item, inputStack);
-                            return (
-                                <Bar
-                                    key={item}
-                                    dataKey={item}
-                                    stackId='a'
-                                    fill={pieChartColors2[item]}
-                                    isAnimationActive={false}
-                                    // label={<LabelCustomStacked />}
-                                >
-                                    <LabelList dataKey={item} position='left' />
-                                </Bar>
-                            )
-                        })}
+                        <Tooltip content={<TooltipCustom />} />
+                        {[...inputStack.reverse()].map((item, i) => (
+                            <Bar
+                                key={item}
+                                dataKey={item}
+                                stackId='a'
+                                fill={pieChartColors2[item]}
+                                isAnimationActive={false}
+                                onMouseOver={() => setTooltip(item)}
+                                label={<LabelCustomStackedTotal topBar={i === inputStack.length - 1} />}
+                            >
+                                <LabelList dataKey={item} position='left' content={<LabelCustomStacked item={item} />} />
+                            </Bar>
+                        ))}
                     </BarChart>
 
                     <div style={{ paddingLeft: 50, height: 180 }}>
-                        {inputStack.map((key, i) => (
+                        {[...inputStack.reverse()].map((key, i) => (
                             <div key={key} style={{ display: 'flex' }}>
+                                <div style={{ paddingRight: 5 }}>{'(' + (i + 1) + ')'}</div>
                                 <StyledBadge
                                     size='small'
                                     color={pieChartColors2[key]}
@@ -116,7 +147,6 @@ const StyledBadge = styled(Badge)`
         border-radius: 0;
     }
 `;
-
 
 
 

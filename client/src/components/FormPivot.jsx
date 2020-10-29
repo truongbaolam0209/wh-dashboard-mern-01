@@ -7,12 +7,15 @@ import ButtonCapsule from './ui/ButtonCapsule';
 
 
 
-const FormPivot = ({ projectName, data, dataRecord }) => {
+const FormPivot = ({ projectName, data, dataRecord, openDrawingTable }) => {
 
-    const { columnsIndexArray } = data;
+    const { columnsIndexArray, allDrawingsLatestRevision } = data;
 
 
-    const [pivotArray, setPivotArray] = useState([]);
+    console.log(columnsIndexArray);
+
+
+    const [columnsArray, setColumnsArray] = useState([]);
     const [titleLeft, setTitleLeft] = useState(Object.keys(columnsIndexArray));
     const [value, setValue] = useState('Select an option...');
     const [selected, setSelected] = useState(null);
@@ -27,37 +30,44 @@ const FormPivot = ({ projectName, data, dataRecord }) => {
             setModalFormatVisible(true);
         } else {
             setTitleLeft(titleLeft.filter(title => title !== value));
-            setPivotArray([...pivotArray, value]);
+            setColumnsArray([...columnsArray, value]);
         };
     };
 
     const selectFormat = (e) => {
         const formatType = e.target.textContent;
         setTitleLeft(titleLeft.filter(title => title !== selected));
-        setPivotArray([...pivotArray, selected + ' - ' + formatType]);
+        setColumnsArray([...columnsArray, selected + ' - ' + formatType]);
         setModalFormatVisible(false);
     };
 
     const onResetHandle = () => {
-        setPivotArray([]);
+        setColumnsArray([]);
         setTitleLeft(Object.keys(columnsIndexArray));
-    };
-
-
-    const sortedTableOpen = () => {
-        // openDrawingTable(projectName, 'Sorted Table', pivotArray);
     };
 
 
     const onRemoveCategory = (e) => {
         const btnName = e.target.previousSibling.previousSibling.innerText;
-        setPivotArray(pivotArray.filter(x => x !== btnName));
+        setColumnsArray(columnsArray.filter(x => x !== btnName));
+    };
+
+
+
+    const sortedTableOpen = () => {
+        openDrawingTable(
+            projectName,
+            { type: 'Sorted table', category: 'category test' },
+            allDrawingsLatestRevision,
+            columnsIndexArray,
+            columnsArray
+        );
     };
 
 
     return (
         <div style={{ marginTop: '10px', padding: '20px' }}>
-            {pivotArray.map(cl => (
+            {columnsArray.map(cl => (
                 <div key={cl} style={{ width: '100%', margin: '10px auto', padding: 5, border: `1px solid ${colorType.grey1}`, borderRadius: 3 }}>
                     <span style={{ marginRight: 15 }}>{cl}</span>
                     <Divider type='vertical' />
@@ -103,6 +113,7 @@ const FormPivot = ({ projectName, data, dataRecord }) => {
                 <ButtonCapsule btnname='Month' onClick={selectFormat} />
                 <ButtonCapsule btnname='Year' onClick={selectFormat} />
             </Modal>
+
 
             <Modal
                 title={`Record ${projectName}`}

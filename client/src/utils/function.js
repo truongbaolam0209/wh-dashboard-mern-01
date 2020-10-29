@@ -136,46 +136,33 @@ export const mergeUndefined = ({ drawingCount, drawingList }, mergeWith) => {
     };
 };
 
+export const formatString = (str) => {
+    let mystring = str.replace(/ /g, '').replace(/\(|\)/g, '');
+    return mystring.charAt(0).toLowerCase() + mystring.slice(1);
+};
 
 
 export const pickDataToTable = (drawings, columnsIndexArray) => {
 
-    let dwgArray = [];
+    const headerArr = [
+        'Drawing Number', 'Drawing Name', 'RFA Ref', 'Drg Type', 'Use For', 'Coordinator In Charge',
+        'Modeller', 'Model Finish (T)', 'Model Finish (A)', 'Model Progress', 'Drawing Start (T)', 'Drawing Start (A)',
+        'Drawing Finish (T)', 'Drawing Finish (A)', 'Drawing Progress',
+        'Drg to Consultant (T)', 'Drg to Consultant (A)', 'Consultant Reply (T)', 'Consultant Reply (A)',
+        'get Approval (T)', 'get Approval (A)', 'Construction issuance date', 'Construction Start', 'Rev', 'Status', 'Remark'
+    ];
+
+    let arr = [];
     drawings.forEach(dwg => {
-        const drawingNumber = dwg[columnsIndexArray['Drawing Number']].value || 'N/A';
-        const drawingName = dwg[columnsIndexArray['Drawing Name']].value || 'N/A';
-        const rfaRef = dwg[columnsIndexArray['RFA Ref']].value || 'N/A';
-        const drgType = dwg[columnsIndexArray['Drg Type']].value || 'N/A';
-        const useFor = dwg[columnsIndexArray['Use For']].value || 'N/A';
-        const coordinatorInCharge = dwg[columnsIndexArray['Coordinator In Charge']].value || 'N/A';
-        const modeller = dwg[columnsIndexArray['Modeller']].value || 'N/A';
-        const drgToConsultantT = dwg[columnsIndexArray['Drg to Consultant (T)']].value || 'N/A';
-        const drgToConsultantA = dwg[columnsIndexArray['Drg to Consultant (A)']].value || 'N/A';
-        const getApprovalT = dwg[columnsIndexArray['get Approval (T)']].value || 'N/A';
-        const getApprovalA = dwg[columnsIndexArray['get Approval (A)']].value || 'N/A';
-        const rev = dwg[columnsIndexArray['Rev']].value || 'N/A';
-        const status = dwg[columnsIndexArray['Status']].value || 'N/A';
-
-        dwgArray.push({
-            drawingNumber,
-            drawingName,
-            rfaRef,
-            drgType,
-            useFor,
-            coordinatorInCharge,
-            modeller,
-            drgToConsultantT,
-            drgToConsultantA,
-            getApprovalT,
-            getApprovalA,
-            rev,
-            status
+        let obj = {};
+        Object.keys(columnsIndexArray).forEach(header => {
+            obj[formatString(header)] = dwg[columnsIndexArray[header]].value || 'N/A';
         });
+        arr.push(obj);
     });
-
-    return dwgArray;
+    console.log(arr);
+    return arr;
 };
-
 
 
 

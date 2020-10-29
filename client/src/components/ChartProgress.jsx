@@ -98,7 +98,12 @@ export default ChartProgress;
 
 const Container = styled.div`
     :hover {
-        cursor: pointer,
+        cursor: pointer;
+        span {
+            color: black;
+        }
     }
+
+
 `;
 

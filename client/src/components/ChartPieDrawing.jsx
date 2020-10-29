@@ -8,27 +8,6 @@ import { getAllDrawingSameValueInOneColumn, mergeUndefined } from '../utils/func
 
 
 
-const LabelCustom = (props) => {
-
-    const { cx, cy, midAngle, innerRadius, outerRadius, value } = props;
-    const RADIAN = Math.PI / 180;
-    const radius = 28 + innerRadius + (outerRadius - innerRadius);
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-    return (
-        <text
-            x={x}
-            y={y}
-            fill='black'
-            textAnchor={x > cx ? 'start' : 'end'}
-            dominantBaseline='central'
-        >
-            {value}
-        </text>
-    );
-};
-
-
 
 const ChartPieDrawing = ({ data, openDrawingTable, projectName }) => {
 
@@ -40,6 +19,27 @@ const ChartPieDrawing = ({ data, openDrawingTable, projectName }) => {
             { type: 'Drawing Status', category: portion.name },
             drawingList[portion.name],
             data.columnsIndexArray
+        );
+    };
+
+
+    const LabelCustom = (props) => {
+
+        const { cx, cy, midAngle, innerRadius, outerRadius, value } = props;
+        const RADIAN = Math.PI / 180;
+        const radius = 28 + innerRadius + (outerRadius - innerRadius);
+        const x = cx + radius * Math.cos(-midAngle * RADIAN);
+        const y = cy + radius * Math.sin(-midAngle * RADIAN);
+        return (
+            <text
+                x={x}
+                y={y}
+                fill='black'
+                textAnchor={x > cx ? 'start' : 'end'}
+                dominantBaseline='central'
+            >
+                {value}
+            </text>
         );
     };
 

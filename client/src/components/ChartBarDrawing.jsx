@@ -10,7 +10,10 @@ const ChartBarDrawing = ({ data, openDrawingTable, projectName }) => {
 
 
     const { drawingCount, drawingList } = mergeUndefined(getAllDrawingSameValueInOneColumn(data, 'Rev'), '0');
-    const dataChart = _.map(drawingCount, (value, name) => ({ name, value }));
+    const dataChart = _.map(drawingCount, (value, name) => ({ name, value }))
+        .sort((a, b) => (a.name > b.name) ? 1 : -1);
+
+
 
     const onClick = (e) => {
         openDrawingTable(
@@ -30,7 +33,6 @@ const ChartBarDrawing = ({ data, openDrawingTable, projectName }) => {
         setActiveIndex(null);
     };
 
-
     return (
         <div style={{ margin: '0 auto', display: 'table' }}>
             <BarChart
@@ -41,7 +43,7 @@ const ChartBarDrawing = ({ data, openDrawingTable, projectName }) => {
                 padding={{ top: 10 }}
                 barSize={20}
             >
-                <XAxis dataKey='name' textAnchor='end' angle={-45} interval={0} scale='point' padding={{ left: 30, right: 30 }} />
+                <XAxis dataKey='name' textAnchor='middle' interval={0} scale='point' padding={{ left: 30, right: 30 }} />
                 <YAxis />
                 <Tooltip />
                 <CartesianGrid strokeDasharray='3 3' />
