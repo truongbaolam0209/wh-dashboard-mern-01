@@ -3,8 +3,8 @@ import { Badge } from 'antd';
 import React, { useState } from 'react';
 import { Bar, BarChart, CartesianGrid, LabelList, Tooltip, XAxis, YAxis } from 'recharts';
 import styled from 'styled-components';
-import { chartWidth, colorType, pieChartColors2 } from '../assets/constant';
-import { convertDataToStackedChart } from '../utils/function';
+import { chartWidth, colorType, inputStackData, pieChartColors2 } from '../assets/constant';
+import { convertDataToStackedChart, sortStatusOrder } from '../utils/function';
 import CardPanel from './ui/CardPanel';
 
 
@@ -19,6 +19,8 @@ const ChartBarStack = ({ data, title }) => {
     const inputStack = title === 'Drawing Status' ? convertDataToStackedChart(data).itemArr
         : title === 'Productivity - (days per drawing)' ? data.inputStack : null;
 
+
+    // console.log(inputData, inputStack);
 
     const LabelCustomStacked = (props) => {
         const { x, y, value, height } = props;
@@ -68,11 +70,10 @@ const ChartBarStack = ({ data, title }) => {
             if (bar.dataKey === tooltip) {
                 return (
                     <div style={{
-                        background: 'white', 
+                        background: 'white',
                         border: '1px solid grey',
                         padding: '10px',
                         maxWidth: '180px'
-
                     }}>
                         {bar.name}<br />({bar.value})
                     </div>
@@ -103,7 +104,7 @@ const ChartBarStack = ({ data, title }) => {
                         <XAxis tickSize={3} dataKey='name' textAnchor='end' angle={-20} interval={0} scale='point' padding={{ left: 50, right: 50 }} />
                         <YAxis />
                         <Tooltip content={<TooltipCustom />} />
-                        {[...inputStack.reverse()].map((item, i) => (
+                        {sortStatusOrder(inputStack).map((item, i) => (
                             <Bar
                                 key={item}
                                 dataKey={item}
@@ -119,9 +120,9 @@ const ChartBarStack = ({ data, title }) => {
                     </BarChart>
 
                     <div style={{ paddingLeft: 50, height: 180 }}>
-                        {[...inputStack.reverse()].map((key, i) => (
+                        {sortStatusOrder(inputStack).reverse().map((key, i) => (
                             <div key={key} style={{ display: 'flex' }}>
-                                <div style={{ paddingRight: 5 }}>{'(' + (i + 1) + ')'}</div>
+                                <div style={{ paddingRight: 5 }}>{'(' + (inputStackData.indexOf(key) + 1) + ')'}</div>
                                 <StyledBadge
                                     size='small'
                                     color={pieChartColors2[key]}

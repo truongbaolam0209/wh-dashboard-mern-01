@@ -1,22 +1,12 @@
 
 import { Badge } from 'antd';
 import React from 'react';
-import { Bar, BarChart, CartesianGrid, LabelList, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from 'recharts';
 import styled from 'styled-components';
 import { chartWidth, colorType, sizeType } from '../assets/constant';
 import { getDrawingLateNow } from '../utils/function';
 import CardPanel from './ui/CardPanel';
 
-
-
-const LabelPieChart = (props) => {
-
-    console.log(props);
-
-    return (
-        <div></div>
-    );
-};
 
 
 const ChartBarDrawingLate = ({ data, title }) => {
@@ -38,7 +28,24 @@ const ChartBarDrawingLate = ({ data, title }) => {
     ];
 
     const inputData = title === 'No Of Drawing Late Construction' ? dummyLateConstruction
-        : title === 'No Of Drawing Late Approval' ? dataChart : null
+        : title === 'No Of Drawing Late Approval' ? dataChart : null;
+
+    const LabelCustomStackedTotal = (props) => {
+        const { x, y, value } = props;
+        return (
+            <>
+                <text
+                    style={{ fontSize: 17, fontWeight: 'bold' }}
+                    x={x + 10}
+                    y={y - 10}
+                    fill='black'
+                    dominantBaseline='central'
+                >
+                    {value}
+                </text>
+            </>
+        );
+    };
 
     return (
 
@@ -62,8 +69,10 @@ const ChartBarDrawingLate = ({ data, title }) => {
                     dataKey='value'
                     fill={colorType.red}
                     background={{ fill: '#eee', padding: '0 25px' }}
+                    isAnimationActive={false}
+                    label={<LabelCustomStackedTotal />}
                 >
-                    <LabelList dataKey='value' position='top' />
+                    {/* <LabelList dataKey='value' position='top' /> */}
                 </Bar>
             </BarChart>
 

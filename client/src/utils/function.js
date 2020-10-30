@@ -69,11 +69,9 @@ export const getDataConverted = (projectArray) => {
 
 
 
-export const getAllDrawingSameValueInOneColumn = ({
-    columnsIndexArray,
-    allDrawings,
-    allDrawingsLatestRevision
-}, column, dataType) => {
+export const getAllDrawingSameValueInOneColumn = (data, column, dataType) => {
+
+    const { columnsIndexArray, allDrawings, allDrawingsLatestRevision } = data;
 
     const drawings = dataType === 'all' ? allDrawings : allDrawingsLatestRevision;
     const indexCategory = columnsIndexArray[column];
@@ -121,13 +119,21 @@ export const getDrawingLateNow = (data, type) => {
 
 
 
-export const mergeUndefined = ({ drawingCount, drawingList }, mergeWith) => {
+export const mergeUndefined = ({ drawingCount, drawingList }, mergeWith, columnsIndexArray, columnHeader) => {
     if (drawingCount['undefined'] === undefined) return;
 
     drawingCount[mergeWith] = (drawingCount[mergeWith] || 0) + drawingCount['undefined'];
     delete drawingCount['undefined'];
 
     drawingList[mergeWith] = [...drawingList[mergeWith] || [], ...drawingList['undefined']];
+
+    // drawingList[mergeWith].forEach(dwg => {
+    //     if (columnsIndexArray) { // dont know why columnsIndexArray sometimes undefined
+    //         if (dwg[columnsIndexArray[columnHeader]].value === undefined) {
+    //             dwg[columnsIndexArray[columnHeader]].value = mergeWith;
+    //         };
+    //     };
+    // });
     delete drawingList['undefined'];
 
     return {
@@ -136,6 +142,7 @@ export const mergeUndefined = ({ drawingCount, drawingList }, mergeWith) => {
     };
 };
 
+
 export const formatString = (str) => {
     let mystring = str.replace(/ /g, '').replace(/\(|\)/g, '');
     return mystring.charAt(0).toLowerCase() + mystring.slice(1);
@@ -143,15 +150,6 @@ export const formatString = (str) => {
 
 
 export const pickDataToTable = (drawings, columnsIndexArray) => {
-
-    const headerArr = [
-        'Drawing Number', 'Drawing Name', 'RFA Ref', 'Drg Type', 'Use For', 'Coordinator In Charge',
-        'Modeller', 'Model Finish (T)', 'Model Finish (A)', 'Model Progress', 'Drawing Start (T)', 'Drawing Start (A)',
-        'Drawing Finish (T)', 'Drawing Finish (A)', 'Drawing Progress',
-        'Drg to Consultant (T)', 'Drg to Consultant (A)', 'Consultant Reply (T)', 'Consultant Reply (A)',
-        'get Approval (T)', 'get Approval (A)', 'Construction issuance date', 'Construction Start', 'Rev', 'Status', 'Remark'
-    ];
-
     let arr = [];
     drawings.forEach(dwg => {
         let obj = {};
@@ -160,7 +158,6 @@ export const pickDataToTable = (drawings, columnsIndexArray) => {
         });
         arr.push(obj);
     });
-    console.log(arr);
     return arr;
 };
 
@@ -192,4 +189,51 @@ export const convertDataToStackedChart = (data) => {
 
 
 
+export const sortStatusOrder = (statusArr) => {
+    const inputStackData = [
+        'Not Started',
+        '1st cut of model in-progress',
+        '1st cut of drawing in-progress',
+        'Pending design',
+        'Consultant reviewing',
+        'Reject and resubmit',
+        'Approved with comments, to Resubmit',
+        'Revise In-Progress',
+        'Approved with Comment, no submission Required',
+        'Approved for Construction',
+    ];
+    let arr = [];
+    inputStackData.forEach(element => {
+        statusArr.forEach(e => {
+            if (element === e) arr.push(element);
+        });
+    });
+    if (arr.length === 0) return statusArr;
+    return arr;
+};
 
+export const randomInteger = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+export const createDummyRecords = () => {
+    let dummyRecords = [];
+
+    for (let i = 0; i < 100; i++) {
+
+        dummyRecords.push({
+            date: moment(new Date(2020, 6, 21)).add(i, 'day')._d,
+            projects: [
+                {
+                    projectName: 'Handy',
+                    drawingLateApproval: randomInteger(30, 60)
+                },
+                {
+                    projectName: 'Sumang',
+                    drawingLateApproval: randomInteger(30, 60)
+                },
+            ]
+        });
+    };
+    return dummyRecords;
+};

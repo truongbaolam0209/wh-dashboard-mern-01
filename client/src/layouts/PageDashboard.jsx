@@ -1,4 +1,5 @@
 import { Col, Divider, Modal, Row, Skeleton } from 'antd';
+import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { colorType } from '../assets/constant';
 import ChartBarDrawing from '../components/ChartBarDrawing';
@@ -16,9 +17,7 @@ import { getDataConverted } from '../utils/function';
 
 
 
-// const randomInteger = (min, max) => {
-//     return Math.floor(Math.random() * (max - min + 1)) + min;
-// };
+
 
 
 const PageDashboard = () => {
@@ -26,7 +25,7 @@ const PageDashboard = () => {
 
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [dataRecord, setDataRecord] = useState(null);
+    // const [dataRecord, setDataRecord] = useState(null);
 
 
     useEffect(() => {
@@ -34,19 +33,19 @@ const PageDashboard = () => {
         const loadData = async () => {
             setLoading(true);
             try {
-                // const result = await Axios.post(
-                //     'https://bim.wohhup.com/api/smartsheet/get-sheets-dashboard',
-                //     { listSheetId: [8919906142971780, 4758181617395588] }
-                // );
-                // setData(getDataConverted(result.data));
-                // setLoading(false);
+                const result = await Axios.post(
+                    'https://bim.wohhup.com/api/smartsheet/get-sheets-dashboard',
+                    { listSheetId: [8919906142971780, 4758181617395588] }
+                );
+                setData(getDataConverted(result.data));
+                setLoading(false);
 
-                setTimeout(() => {
-                    const result = JSON.parse(localStorage.getItem('wh'));
-                    console.log('-----------------------------------------', 'DATA FETCHED');
-                    setData(getDataConverted(result));
-                    setLoading(false);
-                }, 100);
+                // setTimeout(() => {
+                //     const result = JSON.parse(localStorage.getItem('wh'));
+                //     console.log('-----------------------------------------', 'DATA FETCHED');
+                //     setData(getDataConverted(result));
+                //     setLoading(false);
+                // }, 100);
                 // localStorage.setItem('wh', JSON.stringify(result.data));
             } catch (err) {
                 console.log(err);
@@ -54,7 +53,7 @@ const PageDashboard = () => {
             };
         };
         loadData();
-        loadRecords();
+        // loadRecords();
 
     }, []);
 
@@ -191,18 +190,17 @@ const PageDashboard = () => {
     //     };
     // };
 
-    const loadRecords = async () => {
-        try {
-            // const res = await api.get('/records');
-            // setDataRecord(res.data);
-            // localStorage.setItem('wh-r', JSON.stringify(res.data));
+    // const loadRecords = async () => {
+    //     try {
+    //         const res = await api.get('/records');
+    //         setDataRecord(res.data);
+    //         localStorage.setItem('wh-r', JSON.stringify(res.data));
             
-            setDataRecord(JSON.parse(localStorage.getItem('wh-r')));
-            
-        } catch (err) {
-            console.log(err);
-        };
-    };
+    //         setDataRecord(JSON.parse(localStorage.getItem('wh-r')));
+    //     } catch (err) {
+    //         console.log(err);
+    //     };
+    // };
 
 
 
@@ -260,7 +258,7 @@ const PageDashboard = () => {
                                             data={data[projectName]}
                                             openDrawingTable={openDrawingTable}
                                             projectName={projectName}
-                                            dataRecord={dataRecord}
+                                            // dataRecord={dataRecord}
                                         />
                                     </ChartPanel>
 

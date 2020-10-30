@@ -2,6 +2,7 @@ import { Button, Divider, Modal, Select } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { colorType } from '../assets/constant';
+import { createDummyRecords } from '../utils/function';
 import ChartBarRecord from './ChartBarRecord';
 import ButtonCapsule from './ui/ButtonCapsule';
 
@@ -10,9 +11,6 @@ import ButtonCapsule from './ui/ButtonCapsule';
 const FormPivot = ({ projectName, data, dataRecord, openDrawingTable }) => {
 
     const { columnsIndexArray, allDrawingsLatestRevision } = data;
-
-
-    console.log(columnsIndexArray);
 
 
     const [columnsArray, setColumnsArray] = useState([]);
@@ -35,9 +33,9 @@ const FormPivot = ({ projectName, data, dataRecord, openDrawingTable }) => {
     };
 
     const selectFormat = (e) => {
-        const formatType = e.target.textContent;
         setTitleLeft(titleLeft.filter(title => title !== selected));
-        setColumnsArray([...columnsArray, selected + ' - ' + formatType]);
+        // setColumnsArray([...columnsArray, selected + ' - ' + formatType]);
+        setColumnsArray([...columnsArray, selected]);
         setModalFormatVisible(false);
     };
 
@@ -125,7 +123,7 @@ const FormPivot = ({ projectName, data, dataRecord, openDrawingTable }) => {
             >
                 <ChartBarRecord
                     // data={JSON.parse(localStorage.getItem('wh-r'))}
-                    data={dataRecord}
+                    data={createDummyRecords()}
                     projectName={projectName}
                 />
             </Modal>

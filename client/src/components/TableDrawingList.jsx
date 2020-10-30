@@ -131,7 +131,8 @@ const TableDrawingList = ({ data }) => {
             Header: 'Column Data',
             columns: columnsHeader ? getHeaderSorted(columnsName, columnsHeader) : columnsName,
         },
-    ], []);
+    ], [columnsHeader, columnsName]);
+
 
     return (
         <Container>
